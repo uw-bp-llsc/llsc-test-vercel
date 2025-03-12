@@ -1,0 +1,63 @@
+[project]
+name = "llsc-backend"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "uwblueprint", email = "matthewwang@uwblueprint.org"},
+]
+dependencies = [
+    "fastapi[standard]>=0.115.0",
+    "sqlalchemy>=2.0.35",
+    "alembic>=1.13.3",
+    "ruff>=0.6.7",
+    "pyright>=1.1.381",
+    "python-dotenv>=1.0.1",
+    "firebase-admin>=6.5.0",
+    "pytest>=8.3.3",
+    "inflection>=0.5.1",
+    "pre-commit>=4.0.0",
+    "psycopg2>=2.9.9",
+    "boto3>=1.35.71",
+    "pytest-asyncio>=0.25.3",
+]
+requires-python = "==3.12.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[tool.pdm]
+distribution = false
+
+[tool.pdm.scripts]
+dev = "fastapi dev app/server.py"
+precommit = "pre-commit run"
+precommit-install = "pre-commit install"
+dc-down = "docker-compose down -v"
+dc-up = "docker-compose up -d"
+docker-db = {composite = ["dc-down", "dc-up"]}
+db-dev = {composite = ["docker-db", "dev"]}
+revision = "alembic revision --autogenerate"
+upgrade = "alembic upgrade head"
+tests = "pytest -v"
+
+[tool.pytest.ini_options]
+asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "function"
+pythonpath = ["."]
+
+[tool.pdm.dev-dependencies]
+test = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-mock>=3.10.0",
+]
+
+[tool.ruff]
+target-version = "py312"
+# Read more here https://docs.astral.sh/ruff/rules/
+# By default, Ruff enables Flake8's E and F rules
+# Pyflakes - F, pycodestyle - E, W
+# flake8-builtins - A
+# Pylint - PLC, PLE, PLW
+# isort - I
+lint.select = ['E', 'F', 'W', 'A', 'PLC', 'PLE', 'PLW', 'I']
