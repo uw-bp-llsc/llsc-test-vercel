@@ -1,11 +1,12 @@
 import logging
 from contextlib import asynccontextmanager
 from typing import Union
+import os
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
 
-from . import models
+from . import models, create_app
 from .routes import send_email, user
 from .utilities.constants import LOGGER_NAME
 from .utilities.firebase_init import initialize_firebase
@@ -42,3 +43,9 @@ def read_root():
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
+
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for Railway deployment"""
+    return {"status": "healthy"}

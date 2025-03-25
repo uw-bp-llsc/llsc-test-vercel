@@ -35,7 +35,16 @@ target_metadata = Base.metadata
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
-config.set_main_option("sqlalchemy.url", os.environ["POSTGRES_DATABASE_URL"])
+
+# Handle Railway's DATABASE_URL if it exists (production)
+database_url = os.environ.get("DATABASE_URL") or os.environ.get("POSTGRES_DATABASE_URL")
+
+# Railway provides DATABASE_URL in the format: postgres://user:pass@host.railway.app:port/dbname
+# But SQLAlchemy 1.4+ requires postgresql:// instead of postgres://
+if database_url and database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+config.set_main_option("sqlalchemy.url", database_url)
 log.info("Finished migration env config setup")
 
 

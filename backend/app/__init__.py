@@ -39,6 +39,10 @@ def create_app():
             "http://localhost:3000",
             "https://uw-blueprint-starter-code.firebaseapp.com",
             "https://uw-blueprint-starter-code.web.app",
+            # Vercel deployment domains - update with your actual domain when known
+            "https://your-project-name.vercel.app",
+            # Allows all Vercel preview deployments
+            "https://*.vercel.app",
             # TODO: create a separate middleware function to dynamically
             # determine this value
             # re.compile("^https:\/\/uw-blueprint-starter-code--pr.*\.web\.app$"),
